@@ -1,0 +1,14 @@
+[Unit]
+Description=Etcd Server
+After=network.target
+Requires=etcd.socket
+
+[Service]
+Type=simple
+StandardOutput=journal
+StandardError=journal
+ExecStart=/usr/local/bin/etcd -vv
+
+[Install]
+WantedBy=multi-user.target
+Also=etcd.socket
