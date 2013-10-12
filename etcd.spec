@@ -2,7 +2,7 @@
 
 Name:		etcd
 Version:	0.1.2
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -52,6 +52,9 @@ install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.socket
 %doc LICENSE README.md Documentation/internal-protocol-versioning.md
 
 %changelog
+* Sat Oct 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 0.1.2-2
+- Fix typo in the etc.service file
+
 * Sat Oct 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 0.1.2-1
 - Ver. 0.1.2
 - Integrate with systemd
