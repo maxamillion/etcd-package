@@ -2,7 +2,7 @@
 
 Name:		etcd
 Version:	0.1.2
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -13,6 +13,7 @@ Source2:	etcd.socket
 Patch1:		etcd-0001-feat-activation-add-socket-activation.patch
 
 BuildRequires:	golang
+BuildRequires:	golang("code.google.com/p/go.net")
 BuildRequires:	systemd
 
 Requires(post): systemd
@@ -29,7 +30,6 @@ const releaseVersion = \"%{version}\"" > release_version.go
 %patch1 -p1 -b .systemd-activation
 # These all packages should be unbundled
 mkdir -p src/code.google.com/p
-cp -r third_party/code.google.com/p/go.net/ src/code.google.com/p/
 cp -r third_party/code.google.com/p/goprotobuf/ src/code.google.com/p/
 mkdir -p src/github.com/coreos
 cp -r third_party/github.com/coreos/go-log/ src/github.com/coreos/
@@ -41,7 +41,7 @@ mkdir -p src/bitbucket.org/kardianos
 cp -r third_party/bitbucket.org/kardianos/osext/ src/bitbucket.org/kardianos/
 
 %build
-GOPATH="${PWD}" go build -v -x -o etcd
+GOPATH="${PWD}:%{_datadir}/gocode" go build -v -x -o etcd
 
 %install
 install -D -p -m 0755 etcd %{buildroot}%{_bindir}/etcd
@@ -67,6 +67,9 @@ install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.socket
 %doc LICENSE README.md Documentation/internal-protocol-versioning.md
 
 %changelog
+* Sun Oct 13 2013 Peter Lemenkov <lemenkov@gmail.com> - 0.1.2-4
+- go.net library unbundled (see rhbz #1018476)
+
 * Sat Oct 12 2013 Peter Lemenkov <lemenkov@gmail.com> - 0.1.2-3
 - Prepare for packages unbundling
 - Verbose build
