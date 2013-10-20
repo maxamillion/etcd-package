@@ -2,7 +2,7 @@
 
 Name:		etcd
 Version:	0.1.2
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -11,9 +11,15 @@ Source0:	https://github.com/coreos/%{name}/archive/v%{version}/%{name}-v%{versio
 Source1:	etcd.service
 Source2:	etcd.socket
 Patch1:		etcd-0001-feat-activation-add-socket-activation.patch
+Patch2:		etcd-0002-Switch-to-goraft-raft.patch
 
 BuildRequires:	golang
-BuildRequires:	golang("code.google.com/p/go.net")
+BuildRequires:	golang(code.google.com/p/go.net)
+BuildRequires:	golang(code.google.com/p/goprotobuf)
+BuildRequires:	golang(bitbucket.org/kardianos/osext)
+BuildRequires:	golang(github.com/coreos/go-log/log)
+BuildRequires:	golang(github.com/coreos/go-systemd)
+BuildRequires:	golang(github.com/goraft/raft)
 BuildRequires:	systemd
 
 Requires(post): systemd
@@ -28,17 +34,12 @@ A highly-available key value store for shared configuration.
 echo "package main
 const releaseVersion = \"%{version}\"" > release_version.go
 %patch1 -p1 -b .systemd-activation
-# These all packages should be unbundled
-mkdir -p src/code.google.com/p
-cp -r third_party/code.google.com/p/goprotobuf/ src/code.google.com/p/
+%patch2 -p1 -b .switch_to_goraft_raft
+# Remove all 3rd party libs (we're using system-wide ones)
+rm -rf third_party
+# Make link for etcd itself
 mkdir -p src/github.com/coreos
-cp -r third_party/github.com/coreos/go-log/ src/github.com/coreos/
-cp -r third_party/github.com/coreos/go-raft/ src/github.com/coreos/
-cp -r third_party/github.com/coreos/go-systemd/ src/github.com/coreos/
-# for etcd itself
 ln -s ../../../ src/github.com/coreos/etcd
-mkdir -p src/bitbucket.org/kardianos
-cp -r third_party/bitbucket.org/kardianos/osext/ src/bitbucket.org/kardianos/
 
 %build
 GOPATH="${PWD}:%{_datadir}/gocode" go build -v -x -o etcd
@@ -67,6 +68,13 @@ install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.socket
 %doc LICENSE README.md Documentation/internal-protocol-versioning.md
 
 %changelog
+* Sun Oct 20 2013 Peter Lemenkov <lemenkov@gmail.com> - 0.1.2-5
+- goprotobuf library unbundled (see rhbz #1018477)
+- go-log library unbundled (see rhbz #1018478)
+- go-raft library unbundled (see rhbz #1018479)
+- go-systemd library unbundled (see rhbz #1018480)
+- kardianos library unbundled (see rhbz #1018481)
+
 * Sun Oct 13 2013 Peter Lemenkov <lemenkov@gmail.com> - 0.1.2-4
 - go.net library unbundled (see rhbz #1018476)
 
