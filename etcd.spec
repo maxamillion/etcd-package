@@ -2,7 +2,7 @@
 
 Name:		etcd
 Version:	0.1.2
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -68,6 +68,9 @@ install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.socket
 %doc LICENSE README.md Documentation/internal-protocol-versioning.md
 
 %changelog
+* Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.1.2-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
+
 * Sun Oct 20 2013 Peter Lemenkov <lemenkov@gmail.com> - 0.1.2-5
 - goprotobuf library unbundled (see rhbz #1018477)
 - go-log library unbundled (see rhbz #1018478)
