@@ -10,6 +10,7 @@ URL:		https://github.com/coreos/etcd/
 Source0:	https://github.com/coreos/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
 Source1:	etcd.service
 Source2:	etcd.socket
+Patch0:         0001-De-bundle-third_party.patch
 
 BuildRequires:	golang
 BuildRequires:	golang(code.google.com/p/go.net)
@@ -17,6 +18,7 @@ BuildRequires:	golang(code.google.com/p/goprotobuf)
 BuildRequires:	golang(github.com/BurntSushi/toml)
 BuildRequires:	golang(bitbucket.org/kardianos/osext)
 BuildRequires:	golang(github.com/coreos/go-log/log)
+BuildRequires:	golang(github.com/coreos/go-etcd)
 BuildRequires:	golang(github.com/coreos/go-systemd)
 BuildRequires:	golang(github.com/goraft/raft)
 BuildRequires:	systemd
@@ -30,6 +32,7 @@ A highly-available key value store for shared configuration.
 
 %prep
 %setup -q -n %{name}-v%{version}
+%patch0 -p1
 echo "package main
 const releaseVersion = \"%{version}\"" > release_version.go
 # Remove all 3rd party libs (we're using system-wide ones)
