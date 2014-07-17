@@ -1,8 +1,8 @@
 %global debug_package %{nil}
 
 Name:		etcd
-Version:	0.1.2
-Release:	6%{?dist}
+Version:	0.4.5
+Release:	1%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -10,12 +10,11 @@ URL:		https://github.com/coreos/etcd/
 Source0:	https://github.com/coreos/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
 Source1:	etcd.service
 Source2:	etcd.socket
-Patch1:		etcd-0001-feat-activation-add-socket-activation.patch
-Patch2:		etcd-0002-Switch-to-goraft-raft.patch
 
 BuildRequires:	golang
 BuildRequires:	golang(code.google.com/p/go.net)
 BuildRequires:	golang(code.google.com/p/goprotobuf)
+BuildRequires:	golang(github.com/BurntSushi/toml)
 BuildRequires:	golang(bitbucket.org/kardianos/osext)
 BuildRequires:	golang(github.com/coreos/go-log/log)
 BuildRequires:	golang(github.com/coreos/go-systemd)
@@ -30,11 +29,9 @@ Requires(postun): systemd
 A highly-available key value store for shared configuration.
 
 %prep
-%setup -q
+%setup -q -n %{name}-v%{version}
 echo "package main
 const releaseVersion = \"%{version}\"" > release_version.go
-%patch1 -p1 -b .systemd-activation
-%patch2 -p1 -b .switch_to_goraft_raft
 # Remove all 3rd party libs (we're using system-wide ones)
 rm -rf third_party
 # Make link for etcd itself
