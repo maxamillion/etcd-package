@@ -18,9 +18,7 @@ BuildRequires:	golang(code.google.com/p/goprotobuf)
 BuildRequires:	golang(github.com/BurntSushi/toml)
 BuildRequires:	golang(bitbucket.org/kardianos/osext)
 BuildRequires:	golang(github.com/coreos/go-log/log)
-BuildRequires:	golang(github.com/coreos/go-etcd)
 BuildRequires:	golang(github.com/coreos/go-systemd)
-BuildRequires:	golang(github.com/goraft/raft)
 BuildRequires:	systemd
 
 Requires(post): systemd
@@ -35,17 +33,31 @@ A highly-available key value store for shared configuration.
 %patch0 -p1
 echo "package main
 const releaseVersion = \"%{version}\"" > release_version.go
-# Remove all 3rd party libs (we're using system-wide ones)
+
+# etcd has its own fork of the client API
+mkdir tmp
+mv third_party/github.com/coreos/go-etcd tmp
+# And a raft fork: https://bugzilla.redhat.com/show_bug.cgi?id=1047194#c12
+mv third_party/github.com/goraft tmp
+
+# Nuke everything else though
 rm -rf third_party
+
+# And restore the third party bits we're keeping
+mkdir -p third_party/github.com/coreos/
+mv tmp/go-etcd third_party/github.com/coreos/
+mv tmp/goraft third_party/github.com/
+rmdir tmp
+
 # Make link for etcd itself
 mkdir -p src/github.com/coreos
 ln -s ../../../ src/github.com/coreos/etcd
 
 %build
-GOPATH="${PWD}:%{_datadir}/gocode" go build -v -x -o etcd
+GOPATH="${PWD}:%{_datadir}/gocode" go build -v -x -o etcd.bin
 
 %install
-install -D -p -m 0755 etcd %{buildroot}%{_bindir}/etcd
+install -D -p -m 0755 etcd.bin %{buildroot}%{_bindir}/etcd
 install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.socket
 
