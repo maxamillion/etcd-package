@@ -2,7 +2,7 @@
 
 Name:		etcd
 Version:	0.4.5
-Release:	1%{?dist}
+Release:	3%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -16,9 +16,12 @@ BuildRequires:	golang
 BuildRequires:	golang(code.google.com/p/go.net)
 BuildRequires:	golang(code.google.com/p/goprotobuf)
 BuildRequires:	golang(github.com/BurntSushi/toml)
+BuildRequires:	golang(github.com/gorilla/mux)
+BuildRequires:	golang(github.com/mreiferson/go-httpclient)
 BuildRequires:	golang(bitbucket.org/kardianos/osext)
 BuildRequires:	golang(github.com/coreos/go-log/log)
 BuildRequires:	golang(github.com/coreos/go-systemd)
+BuildRequires:	golang(github.com/rcrowley/go-metrics)
 BuildRequires:	systemd
 
 Requires(post): systemd
