@@ -2,7 +2,7 @@
 
 Name:		etcd
 Version:	0.4.5
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -14,7 +14,7 @@ Patch0:         0001-De-bundle-third_party.patch
 
 BuildRequires:	golang
 BuildRequires:	golang(code.google.com/p/go.net)
-BuildRequires:	golang(code.google.com/p/goprotobuf)
+BuildRequires:	golang(code.google.com/p/gogoprotobuf)
 BuildRequires:	golang(github.com/BurntSushi/toml)
 BuildRequires:	golang(github.com/gorilla/mux)
 BuildRequires:	golang(github.com/mreiferson/go-httpclient)
