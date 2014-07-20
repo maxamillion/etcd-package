@@ -1,7 +1,6 @@
 [Unit]
 Description=Etcd Server
 After=network.target
-Requires=etcd.socket
 
 [Service]
 Type=simple
@@ -11,4 +10,3 @@ ExecStart=/usr/bin/etcd
 
 [Install]
 WantedBy=multi-user.target
-Also=etcd.socket

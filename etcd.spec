@@ -2,7 +2,7 @@
 
 Name:		etcd
 Version:	0.4.5
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
