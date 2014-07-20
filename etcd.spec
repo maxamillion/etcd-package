@@ -2,7 +2,7 @@
 
 Name:		etcd
 Version:	0.4.5
-Release:	7%{?dist}
+Release:	8%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -59,7 +59,7 @@ ln -s ../../../ src/github.com/coreos/etcd
 GOPATH="${PWD}:%{_datadir}/gocode" go build -v -x -o etcd.bin
 
 %install
-install -D -p -m 0755 etcd.bin %{buildroot}%{_bindir}/etcd
+install -D -p -m 0755 etcd.bin %{buildroot}%{_libexecdir}/etcd
 install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 
 %check
@@ -75,7 +75,7 @@ install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 %systemd_postun %{name}.service
 
 %files
-%{_bindir}/etcd
+%{_libexecdir}/etcd
 %{_unitdir}/%{name}.service
 %doc LICENSE README.md Documentation/internal-protocol-versioning.md
 

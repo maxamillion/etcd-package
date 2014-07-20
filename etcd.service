@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 StandardOutput=journal
 StandardError=journal
-ExecStart=/usr/bin/etcd
+ExecStart=/usr/libexec/etcd
 
 [Install]
 WantedBy=multi-user.target
