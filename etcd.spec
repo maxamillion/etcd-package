@@ -2,14 +2,13 @@
 
 Name:		etcd
 Version:	0.4.5
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
 URL:		https://github.com/coreos/etcd/
 Source0:	https://github.com/coreos/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
 Source1:	etcd.service
-Source2:	etcd.socket
 Patch0:         0001-De-bundle-third_party.patch
 
 BuildRequires:	golang
@@ -62,7 +61,6 @@ GOPATH="${PWD}:%{_datadir}/gocode" go build -v -x -o etcd.bin
 %install
 install -D -p -m 0755 etcd.bin %{buildroot}%{_bindir}/etcd
 install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
-install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.socket
 
 %check
 # empty for now
