@@ -4,8 +4,9 @@ After=network.target
 
 [Service]
 Type=simple
-StandardOutput=journal
-StandardError=journal
+# etc logs to the journal directly, suppress double logging
+StandardOutput=null
+WorkingDirectory=/var/lib/etcd
 ExecStart=/usr/libexec/etcd
 
 [Install]
