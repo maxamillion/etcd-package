@@ -77,7 +77,6 @@ install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 %files
 %{_bindir}/etcd
 %{_unitdir}/%{name}.service
-%{_unitdir}/%{name}.socket
 %doc LICENSE README.md Documentation/internal-protocol-versioning.md
 
 %changelog
