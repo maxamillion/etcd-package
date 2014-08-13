@@ -1,15 +1,15 @@
 %global debug_package %{nil}
 
 Name:		etcd
-Version:	0.4.5
-Release:	11%{?dist}
+Version:	0.4.6
+Release:	2%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
 URL:		https://github.com/coreos/etcd/
-Source0:	https://github.com/coreos/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:	https://github.com/coreos/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:	etcd.service
-Source2:	etcd.conf.default
+Source2:	etcd.conf
 Patch0:         0001-De-bundle-third_party.patch
 
 BuildRequires:	golang
@@ -24,6 +24,7 @@ BuildRequires:	golang(github.com/coreos/go-systemd)
 BuildRequires:	golang(github.com/rcrowley/go-metrics)
 BuildRequires:	systemd
 
+Requires(pre):	shadow-utils
 Requires(post): systemd
 Requires(preun): systemd
 Requires(postun): systemd
@@ -32,7 +33,7 @@ Requires(postun): systemd
 A highly-available key value store for shared configuration.
 
 %prep
-%setup -q -n %{name}-v%{version}
+%setup -q -n %{name}-%{version}
 %patch0 -p1
 echo "package main
 const releaseVersion = \"%{version}\"" > release_version.go
@@ -61,7 +62,7 @@ GOPATH="${PWD}:%{_datadir}/gocode" go build -v -x -o etcd.bin
 
 %install
 install -d -m 0755 %{buildroot}%{_sysconfdir}/etcd
-cp %{SOURCE2} %{buildroot}%{_sysconfdir}/etcd/etcd.conf
+install -m 644 -t %{buildroot}%{_sysconfdir}/etcd %{SOURCE2}
 install -D -p -m 0755 etcd.bin %{buildroot}%{_bindir}/etcd
 install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_unitdir}/%{name}.service
 
@@ -71,6 +72,10 @@ install -d -m 0755 %{buildroot}%{_localstatedir}/lib/etcd
 %check
 # empty for now
 
+%pre
+getent group etcd >/dev/null || groupadd -r etcd
+getent passwd etcd >/dev/null || useradd -r -g etcd -d %{_localstatedir}/lib/etcd \
+	-s /sbin/nologin -c "etcd user" etcd
 %post
 %systemd_post %{name}.service
 
@@ -81,13 +86,17 @@ install -d -m 0755 %{buildroot}%{_localstatedir}/lib/etcd
 %systemd_postun %{name}.service
 
 %files
-%{_sysconfdir}/etcd
+%config(noreplace) %{_sysconfdir}/etcd
 %{_bindir}/etcd
-%{_localstatedir}/lib/etcd
+%dir %attr(-,etcd,etcd) %{_localstatedir}/lib/etcd
 %{_unitdir}/%{name}.service
 %doc LICENSE README.md Documentation/internal-protocol-versioning.md
 
 %changelog
+* Wed Aug 13 2014 Eric Paris <eparis@redhat.com> - 0.4.6-2
+- Bump to 0.4.6
+- run as etcd, not root
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.1.2-6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 

@@ -7,6 +7,7 @@ Type=simple
 # etc logs to the journal directly, suppress double logging
 StandardOutput=null
 WorkingDirectory=/var/lib/etcd
+User=etcd
 ExecStart=/usr/bin/etcd
 
 [Install]
