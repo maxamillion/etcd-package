@@ -1,98 +1,16 @@
-From 7fed1d8e85661bfa62b347ce25862fe37a46e4ea Mon Sep 17 00:00:00 2001
-From: Colin Walters <walters@verbum.org>
-Date: Thu, 17 Jul 2014 13:05:39 -0400
-Subject: [PATCH] De-bundle third_party
-
----
- config/config.go                                                    | 2 +-
- config/config_test.go                                               | 4 ++--
- etcd/etcd.go                                                        | 4 ++--
- log/log.go                                                          | 2 +-
- metrics/metrics.go                                                  | 2 +-
- metrics/nil.go                                                      | 2 +-
- metrics/standard.go                                                 | 2 +-
- mod/leader/v2/delete_handler.go                                     | 2 +-
- mod/leader/v2/get_handler.go                                        | 2 +-
- mod/leader/v2/handler.go                                            | 2 +-
- mod/leader/v2/set_handler.go                                        | 2 +-
- mod/lock/v2/acquire_handler.go                                      | 2 +-
- mod/lock/v2/get_index_handler.go                                    | 2 +-
- mod/lock/v2/handler.go                                              | 2 +-
- mod/lock/v2/release_handler.go                                      | 2 +-
- mod/lock/v2/renew_handler.go                                        | 2 +-
- mod/lock/v2/tests/mod_lock_test.go                                  | 2 +-
- mod/mod.go                                                          | 2 +-
- server/peer_server.go                                               | 2 +-
- server/peer_server_handlers.go                                      | 2 +-
- server/server.go                                                    | 2 +-
- server/transporter.go                                               | 2 +-
- server/v1/delete_key_handler.go                                     | 2 +-
- server/v1/get_key_handler.go                                        | 2 +-
- server/v1/set_key_handler.go                                        | 2 +-
- server/v1/tests/delete_handler_test.go                              | 2 +-
- server/v1/tests/get_handler_test.go                                 | 2 +-
- server/v1/tests/put_handler_test.go                                 | 2 +-
- server/v1/watch_key_handler.go                                      | 2 +-
- server/v2/delete_handler.go                                         | 2 +-
- server/v2/get_handler.go                                            | 2 +-
- server/v2/post_handler.go                                           | 2 +-
- server/v2/put_handler.go                                            | 2 +-
- server/v2/tests/delete_handler_test.go                              | 2 +-
- server/v2/tests/get_handler_test.go                                 | 2 +-
- server/v2/tests/post_handler_test.go                                | 2 +-
- server/v2/tests/put_handler_test.go                                 | 2 +-
- store/stats_test.go                                                 | 2 +-
- store/store_test.go                                                 | 2 +-
- tests/functional/cluster_config_test.go                             | 2 +-
- tests/functional/discovery_test.go                                  | 2 +-
- tests/functional/kill_leader_test.go                                | 4 ++--
- tests/functional/multi_node_kill_all_and_recovery_test.go           | 2 +-
- tests/functional/remove_node_test.go                                | 2 +-
- tests/functional/standby_test.go                                    | 2 +-
- tests/functional/v1_migration_test.go                               | 2 +-
- third_party/code.google.com/p/gogoprotobuf/proto/all_test.go        | 2 +-
- third_party/code.google.com/p/gogoprotobuf/proto/clone_test.go      | 2 +-
- third_party/code.google.com/p/gogoprotobuf/proto/equal_test.go      | 2 +-
- third_party/code.google.com/p/gogoprotobuf/proto/lib.go             | 4 ++--
- third_party/code.google.com/p/gogoprotobuf/proto/size_test.go       | 2 +-
- .../code.google.com/p/gogoprotobuf/proto/testdata/test.pb.go        | 2 +-
- .../code.google.com/p/gogoprotobuf/proto/text_parser_test.go        | 2 +-
- third_party/code.google.com/p/gogoprotobuf/proto/text_test.go       | 2 +-
- third_party/code.google.com/p/goprotobuf/proto/all_test.go          | 2 +-
- third_party/code.google.com/p/goprotobuf/proto/clone_test.go        | 2 +-
- third_party/code.google.com/p/goprotobuf/proto/equal_test.go        | 2 +-
- third_party/code.google.com/p/goprotobuf/proto/size_test.go         | 2 +-
- third_party/code.google.com/p/goprotobuf/proto/testdata/test.pb.go  | 2 +-
- third_party/code.google.com/p/goprotobuf/proto/text_parser_test.go  | 2 +-
- third_party/code.google.com/p/goprotobuf/proto/text_test.go         | 2 +-
- third_party/github.com/BurntSushi/toml/_examples/example.go         | 2 +-
- third_party/github.com/BurntSushi/toml/toml-test-encoder/main.go    | 2 +-
- third_party/github.com/BurntSushi/toml/toml-test-go/main.go         | 2 +-
- third_party/github.com/BurntSushi/toml/tomlv/main.go                | 2 +-
- third_party/github.com/coreos/go-etcd/etcd/client_test.go           | 2 +-
- third_party/github.com/coreos/go-log/log/logger.go                  | 2 +-
- third_party/github.com/coreos/go-log/log/sinks_unix.go              | 2 +-
- third_party/github.com/goraft/raft/append_entries.go                | 2 +-
- third_party/github.com/goraft/raft/log_entry.go                     | 2 +-
- .../github.com/goraft/raft/protobuf/append_entries_request.pb.go    | 6 +++---
- .../github.com/goraft/raft/protobuf/append_entries_responses.pb.go  | 6 +++---
- third_party/github.com/goraft/raft/protobuf/log_entry.pb.go         | 6 +++---
- .../github.com/goraft/raft/protobuf/request_vote_request.pb.go      | 6 +++---
- .../github.com/goraft/raft/protobuf/request_vote_responses.pb.go    | 6 +++---
- .../github.com/goraft/raft/protobuf/snapshot_recovery_request.pb.go | 6 +++---
- .../goraft/raft/protobuf/snapshot_recovery_response.pb.go           | 6 +++---
- third_party/github.com/goraft/raft/protobuf/snapshot_request.pb.go  | 6 +++---
- third_party/github.com/goraft/raft/protobuf/snapshot_response.pb.go | 6 +++---
- third_party/github.com/goraft/raft/request_vote.go                  | 2 +-
- third_party/github.com/goraft/raft/snapshot.go                      | 2 +-
- third_party/github.com/gorilla/mux/mux.go                           | 2 +-
- third_party/github.com/gorilla/mux/mux_test.go                      | 2 +-
- .../rcrowley/go-metrics/cmd/metrics-bench/metrics-bench.go          | 2 +-
- .../rcrowley/go-metrics/cmd/metrics-example/metrics-example.go      | 2 +-
- third_party/github.com/rcrowley/go-metrics/librato/librato.go       | 2 +-
- third_party/github.com/rcrowley/go-metrics/stathat/stathat.go       | 2 +-
- 87 files changed, 109 insertions(+), 109 deletions(-)
-
+diff --git a/bench/bench.go b/bench/bench.go
+index 9e7c679..45e855b 100644
+--- a/bench/bench.go
++++ b/bench/bench.go
+@@ -6,7 +6,7 @@ import (
+ 	"strconv"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ var (
 diff --git a/config/config.go b/config/config.go
 index b4cd8c7..1204bbc 100644
 --- a/config/config.go
@@ -121,15 +39,30 @@ index 0b45501..2fceb95 100644
  )
  
  // Ensures that a configuration can be deserialized from TOML.
+diff --git a/discovery/discovery.go b/discovery/discovery.go
+index 19ced31..ede34d0 100644
+--- a/discovery/discovery.go
++++ b/discovery/discovery.go
+@@ -10,7 +10,7 @@ import (
+ 
+ 	etcdErr "github.com/coreos/etcd/error"
+ 	"github.com/coreos/etcd/log"
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ const (
 diff --git a/etcd/etcd.go b/etcd/etcd.go
-index b23fa3d..f9a011a 100644
+index b23fa3d..e243514 100644
 --- a/etcd/etcd.go
 +++ b/etcd/etcd.go
-@@ -26,9 +26,9 @@ import (
+@@ -25,10 +25,10 @@ import (
+ 	"sync"
  	"time"
  
- 	goetcd "github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
+-	goetcd "github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
 -	golog "github.com/coreos/etcd/third_party/github.com/coreos/go-log/log"
++	goetcd "github.com/coreos/go-etcd/etcd"
 +	golog "github.com/coreos/go-log/log"
  	"github.com/coreos/etcd/third_party/github.com/goraft/raft"
 -	httpclient "github.com/coreos/etcd/third_party/github.com/mreiferson/go-httpclient"
@@ -242,14 +175,16 @@ index 232a0bd..c66b079 100644
  
  // setHandler attempts to set the current leader.
 diff --git a/mod/lock/v2/acquire_handler.go b/mod/lock/v2/acquire_handler.go
-index 00e2a48..c631d60 100644
+index 00e2a48..a347413 100644
 --- a/mod/lock/v2/acquire_handler.go
 +++ b/mod/lock/v2/acquire_handler.go
-@@ -10,7 +10,7 @@ import (
+@@ -9,8 +9,8 @@ import (
+ 	"time"
  
  	etcdErr "github.com/coreos/etcd/error"
- 	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
 -	"github.com/coreos/etcd/third_party/github.com/gorilla/mux"
++	"github.com/coreos/go-etcd/etcd"
 +	"github.com/gorilla/mux"
  )
  
@@ -268,18 +203,33 @@ index c03dfea..ac8bdf2 100644
  
  // getIndexHandler retrieves the current lock index.
 diff --git a/mod/lock/v2/handler.go b/mod/lock/v2/handler.go
-index 313e6ea..f53772c 100644
+index 313e6ea..7d17acb 100644
 --- a/mod/lock/v2/handler.go
 +++ b/mod/lock/v2/handler.go
-@@ -5,7 +5,7 @@ import (
+@@ -4,8 +4,8 @@ import (
+ 	"net/http"
  
  	etcdErr "github.com/coreos/etcd/error"
- 	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
 -	"github.com/coreos/etcd/third_party/github.com/gorilla/mux"
++	"github.com/coreos/go-etcd/etcd"
 +	"github.com/gorilla/mux"
  )
  
  const prefix = "/_etcd/mod/lock"
+diff --git a/mod/lock/v2/lock_nodes.go b/mod/lock/v2/lock_nodes.go
+index f7dc0e3..8e5beab 100644
+--- a/mod/lock/v2/lock_nodes.go
++++ b/mod/lock/v2/lock_nodes.go
+@@ -5,7 +5,7 @@ import (
+ 	"sort"
+ 	"strconv"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ // lockNodes is a wrapper for go-etcd's Nodes to allow for sorting by numeric key.
 diff --git a/mod/lock/v2/release_handler.go b/mod/lock/v2/release_handler.go
 index 0a70a5a..1e68134 100644
 --- a/mod/lock/v2/release_handler.go
@@ -333,7 +283,7 @@ index 59358a0..82dfaa7 100644
  
  var ServeMux *http.Handler
 diff --git a/server/peer_server.go b/server/peer_server.go
-index efa7371..9042bcb 100644
+index eda20fc..bae6f08 100644
 --- a/server/peer_server.go
 +++ b/server/peer_server.go
 @@ -12,7 +12,7 @@ import (
@@ -489,7 +439,7 @@ index 65024bd..a9f2a41 100644
  
  func DeleteHandler(w http.ResponseWriter, req *http.Request, s Server) error {
 diff --git a/server/v2/get_handler.go b/server/v2/get_handler.go
-index ae6b758..07a1eb3 100644
+index a452b9b..9564821 100644
 --- a/server/v2/get_handler.go
 +++ b/server/v2/get_handler.go
 @@ -10,7 +10,7 @@ import (
@@ -619,10 +569,10 @@ index 09c1c10..0d5c80a 100644
  
  // Ensure that the cluster configuration can be updated.
 diff --git a/tests/functional/discovery_test.go b/tests/functional/discovery_test.go
-index a769244..1c383ca 100644
+index a769244..67aab0d 100644
 --- a/tests/functional/discovery_test.go
 +++ b/tests/functional/discovery_test.go
-@@ -11,7 +11,7 @@ import (
+@@ -11,11 +11,11 @@ import (
  	"testing"
  	"time"
  
@@ -631,15 +581,22 @@ index a769244..1c383ca 100644
  
  	"github.com/coreos/etcd/server"
  	etcdtest "github.com/coreos/etcd/tests"
+-	goetcd "github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	goetcd "github.com/coreos/go-etcd/etcd"
+ )
+ 
+ type garbageHandler struct {
 diff --git a/tests/functional/kill_leader_test.go b/tests/functional/kill_leader_test.go
-index 7c18d46..65215cb 100644
+index 7c18d46..553bdfc 100644
 --- a/tests/functional/kill_leader_test.go
 +++ b/tests/functional/kill_leader_test.go
-@@ -12,7 +12,7 @@ import (
+@@ -11,8 +11,8 @@ import (
+ 
  	"github.com/coreos/etcd/server"
  	"github.com/coreos/etcd/tests"
- 	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
 -	"github.com/coreos/etcd/third_party/github.com/stretchr/testify/assert"
++	"github.com/coreos/go-etcd/etcd"
 +	"github.com/stretchr/testify/assert"
  )
  
@@ -654,24 +611,56 @@ index 7c18d46..65215cb 100644
  
  	procAttr := new(os.ProcAttr)
 diff --git a/tests/functional/multi_node_kill_all_and_recovery_test.go b/tests/functional/multi_node_kill_all_and_recovery_test.go
-index a5f1e1e..88350b1 100644
+index a5f1e1e..0c15adc 100644
 --- a/tests/functional/multi_node_kill_all_and_recovery_test.go
 +++ b/tests/functional/multi_node_kill_all_and_recovery_test.go
-@@ -11,7 +11,7 @@ import (
+@@ -10,8 +10,8 @@ import (
+ 
  	"github.com/coreos/etcd/server"
  	"github.com/coreos/etcd/tests"
- 	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
 -	"github.com/coreos/etcd/third_party/github.com/stretchr/testify/assert"
++	"github.com/coreos/go-etcd/etcd"
 +	"github.com/stretchr/testify/assert"
  )
  
  // Create a five nodes
+diff --git a/tests/functional/multi_node_kill_one_test.go b/tests/functional/multi_node_kill_one_test.go
+index fe25d9f..96537ba 100644
+--- a/tests/functional/multi_node_kill_one_test.go
++++ b/tests/functional/multi_node_kill_one_test.go
+@@ -7,7 +7,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ // Create a five nodes
+diff --git a/tests/functional/rejoin_test.go b/tests/functional/rejoin_test.go
+index d0b1e1f..48afc3e 100644
+--- a/tests/functional/rejoin_test.go
++++ b/tests/functional/rejoin_test.go
+@@ -9,7 +9,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ func increasePeerAddressPort(args []string, delta int) []string {
 diff --git a/tests/functional/remove_node_test.go b/tests/functional/remove_node_test.go
-index c805211..b46077a 100644
+index c805211..f57980a 100644
 --- a/tests/functional/remove_node_test.go
 +++ b/tests/functional/remove_node_test.go
-@@ -13,7 +13,7 @@ import (
- 	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
+@@ -10,10 +10,10 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
  
  	"github.com/coreos/etcd/tests"
 -	"github.com/coreos/etcd/third_party/github.com/stretchr/testify/assert"
@@ -679,19 +668,86 @@ index c805211..b46077a 100644
  )
  
  // remove the node and node rejoin with previous log
+diff --git a/tests/functional/simple_multi_node_test.go b/tests/functional/simple_multi_node_test.go
+index 31c627b..ee4e201 100644
+--- a/tests/functional/simple_multi_node_test.go
++++ b/tests/functional/simple_multi_node_test.go
+@@ -5,7 +5,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ func TestSimpleMultiNode(t *testing.T) {
+diff --git a/tests/functional/simple_snapshot_test.go b/tests/functional/simple_snapshot_test.go
+index c238d86..e003184 100644
+--- a/tests/functional/simple_snapshot_test.go
++++ b/tests/functional/simple_snapshot_test.go
+@@ -7,7 +7,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ // This test creates a single node and then set a value to it to trigger snapshot
+diff --git a/tests/functional/single_node_recovery_test.go b/tests/functional/single_node_recovery_test.go
+index 5f341ba..632b767 100644
+--- a/tests/functional/single_node_recovery_test.go
++++ b/tests/functional/single_node_recovery_test.go
+@@ -5,7 +5,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ // This test creates a single node and then set a value to it.
+diff --git a/tests/functional/single_node_test.go b/tests/functional/single_node_test.go
+index e8b3011..95f06c4 100644
+--- a/tests/functional/single_node_test.go
++++ b/tests/functional/single_node_test.go
+@@ -5,7 +5,7 @@ import (
+ 	"testing"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ // Create a single node and try to set value
 diff --git a/tests/functional/standby_test.go b/tests/functional/standby_test.go
-index b216ee3..5cad538 100644
+index b216ee3..f77f4bb 100644
 --- a/tests/functional/standby_test.go
 +++ b/tests/functional/standby_test.go
-@@ -11,7 +11,7 @@ import (
+@@ -10,8 +10,8 @@ import (
+ 	"github.com/coreos/etcd/server"
  	"github.com/coreos/etcd/store"
  	"github.com/coreos/etcd/tests"
- 	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
 -	"github.com/coreos/etcd/third_party/github.com/stretchr/testify/assert"
++	"github.com/coreos/go-etcd/etcd"
 +	"github.com/stretchr/testify/assert"
  )
  
  // Create a full cluster and then change the active size.
+diff --git a/tests/functional/util.go b/tests/functional/util.go
+index 135ee14..85add4a 100644
+--- a/tests/functional/util.go
++++ b/tests/functional/util.go
+@@ -26,7 +26,7 @@ import (
+ 	"strconv"
+ 	"time"
+ 
+-	"github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcd"
++	"github.com/coreos/go-etcd/etcd"
+ )
+ 
+ var client = http.Client{
 diff --git a/tests/functional/v1_migration_test.go b/tests/functional/v1_migration_test.go
 index 75aaebb..afaa7e7 100644
 --- a/tests/functional/v1_migration_test.go
@@ -962,7 +1018,7 @@ index a5b22b1..a52086e 100644
  
  var (
 diff --git a/third_party/github.com/coreos/go-etcd/etcd/client_test.go b/third_party/github.com/coreos/go-etcd/etcd/client_test.go
-index c245e47..7718f47 100644
+index c245e47..45f8285 100644
 --- a/third_party/github.com/coreos/go-etcd/etcd/client_test.go
 +++ b/third_party/github.com/coreos/go-etcd/etcd/client_test.go
 @@ -15,7 +15,7 @@ func TestSync(t *testing.T) {
@@ -970,7 +1026,7 @@ index c245e47..7718f47 100644
  
  	// Explicit trailing slash to ensure this doesn't reproduce:
 -	// https://github.com/coreos/go-etcd/issues/82
-+	// https://github.com/coreos/etcd/third_party/github.com/coreos/go-etcd/etcdissues/82
++	// https://github.com/coreos/go-etcd/etcdissues/82
  	c := NewClient([]string{"http://127.0.0.1:4001/"})
  
  	success := c.SyncCluster()
@@ -1400,6 +1456,3 @@ index 1f96837..7265cbe 100644
  	"github.com/stathat/go"
  	"log"
  	"time"
--- 
-1.8.3.1
-

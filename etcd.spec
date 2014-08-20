@@ -4,7 +4,7 @@
 
 Name:		etcd
 Version:	0.4.6
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:	A highly-available key value store for shared configuration
 
 License:	ASL 2.0
@@ -12,7 +12,7 @@ URL:		https://github.com/coreos/etcd/
 Source0:	https://github.com/coreos/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:	etcd.service
 Source2:	etcd.conf
-Patch0:         0001-De-bundle-third_party.patch
+Patch0:         etcd-0.4.6-debundle-third_party-imports.patch
 
 BuildRequires:	golang
 BuildRequires:	golang(code.google.com/p/go.net)
@@ -22,6 +22,7 @@ BuildRequires:	golang(github.com/gorilla/mux)
 BuildRequires:	golang(github.com/mreiferson/go-httpclient)
 BuildRequires:	golang(bitbucket.org/kardianos/osext)
 BuildRequires:	golang(github.com/coreos/go-log/log)
+BuildRequires:  golang(github.com/coreos/go-etcd/etcd)
 BuildRequires:	golang(github.com/coreos/go-systemd)
 BuildRequires:	golang(github.com/rcrowley/go-metrics)
 BuildRequires:	systemd
@@ -61,7 +62,6 @@ const releaseVersion = \"%{version}\"" > release_version.go
 
 # etcd has its own fork of the client API
 mkdir tmp
-mv third_party/github.com/coreos/go-etcd tmp
 # And a raft fork: https://bugzilla.redhat.com/show_bug.cgi?id=1047194#c12
 mv third_party/github.com/goraft tmp
 
@@ -70,7 +70,6 @@ rm -rf third_party
 
 # And restore the third party bits we're keeping
 mkdir -p third_party/github.com/coreos/
-mv tmp/go-etcd third_party/github.com/coreos/
 mv tmp/goraft third_party/github.com/
 rmdir tmp
 
@@ -130,6 +129,9 @@ getent passwd etcd >/dev/null || useradd -r -g etcd -d %{_localstatedir}/lib/etc
 %{gopath}/src/%{import_path}/*
 
 %changelog
+* Wed Aug 20 2014 Adam Miller <maxamillion@fedoraproject.org> - 0.4.6-4
+- Add BuildRequires for new go-etcd golang package, remove bundled version.
+
 * Tue Aug 19 2014 Adam Miller <maxamillion@fedoraproject.org> - 0.4.6-3
 - Add devel sub-package
 
